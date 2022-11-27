@@ -8,8 +8,10 @@ export default function TestPage() {
             <MeButton disabled callback={()=>console.log("hej")} transitionY text='my button' size='small' transitionColor={'AmaranthPurple'}/>
             <MeButton transitionY text='my button' size='medium' transitionColor={'InverseOuterSpaceCrayola'}/>
             <MeButton transitionY text='my button' size='large' transitionColor={'SpaceCadet'}/>
-        <MeInput placeholder='password' color='AmaranthPurple'/>
+        <MeInput placeholder='password' type={"password"} color='AmaranthPurple'/>
         <MeInput placeholder='password' color='InverseEnglishViolet' disabled/>
+        <MeInput type={'date'} placeholder='Date' color='InverseEnglishViolet' />
+        <MeInput type={'datetime-local'} placeholder='Date' color='InverseEnglishViolet' />
         </div>
     )
 }

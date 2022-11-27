@@ -1,4 +1,15 @@
+// REACT
 import React, { useState } from "react";
+
+// NPM INSTALLS
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendar } from "@fortawesome/free-solid-svg-icons";
+import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
+
+/*
+  Information about the MeInput Component
+*/
 
 type HEX = `#${string}`;
 type TRANSITIONHEX = {
@@ -26,9 +37,10 @@ interface MeInputProps {
 }
 export default function MeInput(props: MeInputProps) {
   // ----- STATE -----
-  const [buttonClick, setButtonClick] = useState(false);
-  const [buttonHover, setButtonHover] = useState(false);
-  const [buttonFocus, setButtonFocus] = useState(false);
+  const [onClick, setOnClick] = useState(false);
+  const [onHover, setOnHover] = useState(false);
+  const [onFocus, setOnFocus] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   // ----- STYLING -----
   const handleColor = (): {
     backgroundImage: string;
@@ -112,6 +124,27 @@ export default function MeInput(props: MeInputProps) {
     }
   };
 
+  const wrapperStyle: React.CSSProperties = {
+    position: "relative",
+
+    width: "fit-content",
+  };
+
+  const iconStyle: React.CSSProperties = {
+    position: "absolute",
+    right: "1.6rem",
+    top: "50%",
+
+    color: onHover ? handleColor().secondColor : handleColor().firstColor,
+
+    fontSize: "1.2rem",
+
+    cursor: props.type === "password" ? "pointer" : "",
+
+    transform: "translateY(-50%)",
+    transition: "color 300ms ease-in-out",
+  };
+
   const inputStyle: React.CSSProperties = {
     paddingInline: "1.6rem",
     paddingBlock: "1.8rem",
@@ -121,24 +154,24 @@ export default function MeInput(props: MeInputProps) {
     borderRadius: ".8rem",
     color: props.disabled
       ? handleColor().firstColor
-      : buttonHover
+      : onHover
       ? handleColor()?.secondColor
       : handleColor()?.firstColor,
     border: `3px solid ${handleColor()?.borderColor}`,
     filter: props.disabled
       ? "grayscale(100%)"
-      : buttonClick
+      : onClick
       ? "brightness(.8)"
       : "",
     boxShadow: props.disabled
       ? ""
-      : buttonFocus
+      : onFocus
       ? `inset 0 0 0 2px ${handleColor().firstColor}`
       : "none",
     backgroundImage: handleColor()?.backgroundImage,
     backgroundSize: "100vw",
     backgroundRepeat: "no-repeat",
-    backgroundPosition: props.disabled ? "" : buttonHover ? "100%" : "0%",
+    backgroundPosition: props.disabled ? "" : onHover ? "100%" : "0%",
     transition:
       "background 300ms ease-in-out, color 300ms ease-in-out, transform 300ms cubic-bezier(0.57, 0.21, 0.69, 3.25)",
 
@@ -147,21 +180,39 @@ export default function MeInput(props: MeInputProps) {
 
     cursor: props.disabled ? "not-allowed" : "text",
   };
+  // meTODO https://jacobruiz.com/blog/2021/2/11/how-to-transition-placeholder-text-into-a-label-in-react-floating-label-inputs
   return (
-    <input
-      type={props.type}
-      placeholder={props.placeholder}
-      style={inputStyle}
-      required={props.required}
-      onTouchStart={() => setButtonClick(true)}
-      onTouchEnd={() => setButtonClick(false)}
-      onMouseDown={() => setButtonClick(true)}
-      onMouseUp={() => setButtonClick(false)}
-      onMouseEnter={() => setButtonHover(true)}
-      onMouseLeave={() => setButtonHover(false)}
-      onFocus={() => setButtonFocus(true)}
-      onBlur={() => setButtonFocus(false)}
-      disabled={props.disabled}
-    />
+    <div style={wrapperStyle}>
+      <input
+        type={showPassword ? "text" : props.type}
+        placeholder={props.placeholder}
+        style={inputStyle}
+        required={props.required}
+        onTouchStart={() => setOnClick(true)}
+        onTouchEnd={() => setOnClick(false)}
+        onMouseDown={() => setOnClick(true)}
+        onMouseUp={() => setOnClick(false)}
+        onMouseEnter={() => setOnHover(true)}
+        onMouseLeave={() => setOnHover(false)}
+        onFocus={() => setOnFocus(true)}
+        onBlur={() => setOnFocus(false)}
+        disabled={props.disabled}
+      />
+      {props.type === "date" && (
+        <FontAwesomeIcon icon={faCalendar} style={iconStyle} />
+      )}
+      {props.type === "datetime-local" && (
+        <FontAwesomeIcon icon={faCalendar} style={iconStyle} />
+      )}
+      {props.type === "password" && (
+        <FontAwesomeIcon
+          icon={showPassword ? faEye : faEyeSlash}
+          style={iconStyle}
+          onClick={() => setShowPassword(!showPassword)}
+          onMouseEnter={() => setOnHover(true)}
+          onMouseLeave={() => setOnHover(false)}
+        />
+      )}
+    </div>
   );
 }

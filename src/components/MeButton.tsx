@@ -34,9 +34,9 @@ interface MeButtonProps {
 }
 export default function MeButton(props: MeButtonProps) {
   // ----- STATE -----
-  const [buttonClick, setButtonClick] = useState(false);
-  const [buttonHover, setButtonHover] = useState(false);
-  const [buttonFocus, setButtonFocus] = useState(false);
+  const [onClick, setOnClick] = useState(false);
+  const [onHover, setOnHover] = useState(false);
+  const [onFocus, setOnFocus] = useState(false);
 
   // ----- USE HOOKS -----
 
@@ -181,23 +181,23 @@ export default function MeButton(props: MeButtonProps) {
     borderRadius: ".8rem",
     color: props.disabled
       ? handleColor().firstColor
-      : buttonHover
+      : onHover
       ? handleColor()?.secondColor
       : handleColor()?.firstColor,
     border: `3px solid ${handleColor()?.borderColor}`,
     boxShadow: props.disabled
       ? ""
-      : buttonFocus
+      : onFocus
       ? `inset 0 0 0 2px ${handleColor().firstColor}`
       : "none",
     filter: props.disabled
       ? "grayscale(100%)"
-      : buttonClick
+      : onClick
       ? "brightness(.8)"
       : "",
     backgroundSize: "100vw",
     backgroundRepeat: "no-repeat",
-    backgroundPosition: props.disabled ? "" : buttonHover ? "100%" : "0%",
+    backgroundPosition: props.disabled ? "" : onHover ? "100%" : "0%",
     transition:
       "background 300ms ease-in-out, color 300ms ease-in-out, transform 300ms cubic-bezier(0.57, 0.21, 0.69, 3.25)",
 
@@ -207,7 +207,7 @@ export default function MeButton(props: MeButtonProps) {
     cursor: props.disabled ? "not-allowed" : "pointer",
     transform: props.disabled
       ? ""
-      : buttonHover && props.transitionY
+      : onHover && props.transitionY
       ? "translateY(-0.5rem)"
       : "translateY(0)",
   };
@@ -226,14 +226,14 @@ export default function MeButton(props: MeButtonProps) {
       className="mereact-mebutton"
       style={buttonStyle}
       onClick={props.callback}
-      onTouchStart={() => setButtonClick(true)}
-      onTouchEnd={() => setButtonClick(false)}
-      onMouseDown={() => setButtonClick(true)}
-      onMouseUp={() => setButtonClick(false)}
-      onMouseEnter={() => setButtonHover(true)}
-      onMouseLeave={() => setButtonHover(false)}
-      onFocus={() => setButtonFocus(true)}
-      onBlur={() => setButtonFocus(false)}
+      onTouchStart={() => setOnClick(true)}
+      onTouchEnd={() => setOnClick(false)}
+      onMouseDown={() => setOnClick(true)}
+      onMouseUp={() => setOnClick(false)}
+      onMouseEnter={() => setOnHover(true)}
+      onMouseLeave={() => setOnHover(false)}
+      onFocus={() => setOnFocus(true)}
+      onBlur={() => setOnFocus(false)}
       disabled={props.disabled}
     >
       <i style={iconStyle}>{props.icon}</i>

@@ -20,8 +20,8 @@ interface MeButtonProps {
   size?: "small" | "medium" | "large";
   icon?: string;
   text?: string;
-  type: "submit" | "button" | "reset";
-  transitionColor?:
+  type?: "submit" | "button" | "reset";
+  theme?:
     | "OuterSpaceCrayola"
     | "InverseOuterSpaceCrayola"
     | "SpaceCadet"
@@ -95,7 +95,7 @@ export default function MeButton(props: MeButtonProps) {
     borderColor: HEX;
   } => {
     const angle = 30;
-    switch (props.transitionColor) {
+    switch (props.theme) {
       case "OuterSpaceCrayola":
         return {
           backgroundImage: `linear-gradient(${angle}deg,#F6F7F5 50%,#2E3739 50%)`,
@@ -153,12 +153,12 @@ export default function MeButton(props: MeButtonProps) {
           borderColor: "#4A3A50",
         };
       default:
-        if (props.transitionColor?.fromHEX) {
+        if (props.theme?.fromHEX) {
           return {
-            backgroundImage: `linear-gradient(${angle}deg, ${props.transitionColor.fromHEX} 50%,${props.transitionColor.toHEX} 50%)`,
-            firstColor: props.transitionColor.firstColor,
-            secondColor: props.transitionColor.secondColor,
-            borderColor: props.transitionColor.fromHEX,
+            backgroundImage: `linear-gradient(${angle}deg, ${props.theme.fromHEX} 50%,${props.theme.toHEX} 50%)`,
+            firstColor: props.theme.firstColor,
+            secondColor: props.theme.secondColor,
+            borderColor: props.theme.fromHEX,
           };
         }
         return {

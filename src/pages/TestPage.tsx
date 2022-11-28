@@ -1,6 +1,7 @@
 import React from "react";
 import MeButton from "../components/MeButton";
 import MeInput from "../components/MeInput";
+import MeInputFile from "../components/MeInputFile";
 import MePopup from "../components/MePopup";
 
 export default function TestPage() {
@@ -63,6 +64,7 @@ export default function TestPage() {
         type={"url"}
         required
       />
+      <MeInputFile id="001" label="add your file" />
 
       {/* Fix input file ... checkbox ... radio ... slider */}
     </div>

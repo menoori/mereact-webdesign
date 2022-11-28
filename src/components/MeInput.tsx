@@ -1,11 +1,15 @@
 // REACT
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // NPM INSTALLS
+import { StyleSheet, css } from "aphrodite";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faStopwatch } from "@fortawesome/free-solid-svg-icons";
 
 /*
   Information about the MeInput Component
@@ -22,6 +26,7 @@ type TRANSITIONHEX = {
 interface MeInputProps {
   type?: React.HTMLInputTypeAttribute | undefined;
   disabled?: boolean;
+  hideIcon?: boolean;
   placeholder?: string;
   required?: boolean;
   color?:
@@ -37,13 +42,25 @@ interface MeInputProps {
 }
 export default function MeInput(props: MeInputProps) {
   // ----- CONSTANTS -----
-  const hasIcon = props.type === "password" ? true : false;
   // ----- STATE -----
   const [onClick, setOnClick] = useState(false);
   const [onHover, setOnHover] = useState(false);
   const [onFocus, setOnFocus] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [value, setValue] = useState("");
+
+  // ----- USE HOOKS -----
+  useEffect(() => {
+    try {
+      if (
+        (props.type === "date" || props.type === "datetime-local") &&
+        props.placeholder
+      )
+        throw new Error("date and datetime-local can't have a placeholder");
+    } catch (error) {
+      window.alert(error);
+    }
+  }, []);
   // ----- STYLING -----
   const handleColor = (): {
     backgroundImage: string;
@@ -127,6 +144,29 @@ export default function MeInput(props: MeInputProps) {
     }
   };
 
+  const handleIcon = (): JSX.Element | null => {
+    switch (props.type) {
+      case "date" || "datetime-local":
+        return <FontAwesomeIcon icon={faCalendar} style={iconStyle} />;
+      case "password":
+        return (
+          <FontAwesomeIcon
+            icon={showPassword ? faEye : faEyeSlash}
+            style={iconStyle}
+            onClick={() => setShowPassword(!showPassword)}
+            onMouseEnter={() => setOnHover(true)}
+            onMouseLeave={() => setOnHover(false)}
+          />
+        );
+      case "email":
+        return <FontAwesomeIcon icon={faEnvelope} style={iconStyle} />;
+      case "time":
+        return <FontAwesomeIcon icon={faStopwatch} style={iconStyle} />;
+      default:
+        return null;
+    }
+  };
+
   const wrapperStyle: React.CSSProperties = {
     position: "relative",
 
@@ -135,9 +175,12 @@ export default function MeInput(props: MeInputProps) {
 
   const iconStyle: React.CSSProperties = {
     position: "absolute",
-    right: "1.6rem",
+    left: props.type === "password" ? "" : "1.6rem",
+    right: props.type === "password" ? "1.6rem" : "",
     top: "50%",
+    width: props.hideIcon ? "0" : "",
 
+    opacity: props.hideIcon ? "0" : "1",
     color: onHover ? handleColor().secondColor : handleColor().firstColor,
 
     fontSize: "1.2rem",
@@ -150,7 +193,8 @@ export default function MeInput(props: MeInputProps) {
 
   const labelStyle: React.CSSProperties = {
     position: "absolute",
-    left: "1.9rem",
+    left:
+      handleIcon() === null || props.type === "password" ? "1.9rem" : "3.9rem",
     top: onFocus || value !== "" ? "1.2rem" : "50%",
 
     color: onHover ? handleColor().secondColor : handleColor().firstColor,
@@ -165,8 +209,13 @@ export default function MeInput(props: MeInputProps) {
   };
 
   const inputStyle: React.CSSProperties = {
-    paddingInline: hasIcon ? "1.6rem 3.9rem" : "1.6rem",
-    paddingBlock: "2rem 1.2rem",
+    paddingInline:
+      handleIcon() !== null && !props.hideIcon
+        ? props.type === "password"
+          ? "1.6rem 3.9rem"
+          : "3.6rem 1.6rem"
+        : "1.6rem",
+    paddingBlock: props.placeholder ? "2rem 1.2rem" : "1.8rem",
 
     opacity: props.disabled ? 0.5 : 1,
 
@@ -199,6 +248,13 @@ export default function MeInput(props: MeInputProps) {
 
     cursor: props.disabled ? "not-allowed" : "text",
   };
+
+  const styles = StyleSheet.create({
+    input: {
+      // input[type=range]::-webkit-slider-runnable-track {
+    },
+  });
+
   // ----- HANDLER FUNCTIONS -----
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -223,23 +279,12 @@ export default function MeInput(props: MeInputProps) {
         onBlur={() => setOnFocus(false)}
         disabled={props.disabled}
         onChange={(e) => handleChange(e)}
+        className={css(styles.input)}
       />
-      {props.type === "date" && (
-        <FontAwesomeIcon icon={faCalendar} style={iconStyle} />
+      {handleIcon()}
+      {props.type !== "date" && props.type !== "datetime-local" && (
+        <label style={labelStyle}>{props.placeholder}</label>
       )}
-      {props.type === "datetime-local" && (
-        <FontAwesomeIcon icon={faCalendar} style={iconStyle} />
-      )}
-      {props.type === "password" && (
-        <FontAwesomeIcon
-          icon={showPassword ? faEye : faEyeSlash}
-          style={iconStyle}
-          onClick={() => setShowPassword(!showPassword)}
-          onMouseEnter={() => setOnHover(true)}
-          onMouseLeave={() => setOnHover(false)}
-        />
-      )}
-      <label style={labelStyle}>{props.placeholder}</label>
     </div>
   );
 }

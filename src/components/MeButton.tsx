@@ -15,11 +15,12 @@ type TRANSITIONHEX = {
   secondColor: HEX;
 };
 interface MeButtonProps {
-  callback?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   disabled?: boolean;
   size?: "small" | "medium" | "large";
   icon?: string;
   text?: string;
+  type: "submit" | "button" | "reset";
   transitionColor?:
     | "OuterSpaceCrayola"
     | "InverseOuterSpaceCrayola"
@@ -221,11 +222,16 @@ export default function MeButton(props: MeButtonProps) {
     fontSize: iconSize(),
   };
 
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    if (props.onClick) props.onClick(e);
+  };
+
   return (
     <button
       className="mereact-mebutton"
       style={buttonStyle}
-      onClick={props.callback}
+      type={props.type}
+      onClick={(e) => handleClick(e)}
       onTouchStart={() => setOnClick(true)}
       onTouchEnd={() => setOnClick(false)}
       onMouseDown={() => setOnClick(true)}

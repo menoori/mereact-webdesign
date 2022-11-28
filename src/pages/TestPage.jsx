@@ -5,20 +5,24 @@ import MeInput from '../components/MeInput'
 export default function TestPage() {
     return (
         <div>
-            <MeButton disabled callback={()=>console.log("hej")} transitionY text='my button' size='small' transitionColor={'AmaranthPurple'}/>
+            <form action="" onSubmit={(e)=>e.preventDefault()}>
+
+            <MeButton disabled onClick={()=>console.log("hej")} transitionY text='my button' size='small' transitionColor={'AmaranthPurple'}/>
             <MeButton transitionY text='my button' size='medium' transitionColor={'InverseOuterSpaceCrayola'}/>
-            <MeButton transitionY text='my button' size='large' transitionColor={'SpaceCadet'}/>
+            <MeButton type='submit' transitionY text='my button' size='large' transitionColor={'SpaceCadet'}/>
 
-        <MeInput placeholder='password' type={"password"} color='AmaranthPurple' />
-        <MeInput type={'date'} color='InverseEnglishViolet' />
-        <MeInput type={'datetime-local'} color='InverseEnglishViolet' />
-        <MeInput type={'email'} placeholder="email" color={'SpaceCadet'}  />
-        <MeInput type={'number'} placeholder="number" color={'AmaranthPurple'}  />
-        <MeInput type={'time'} color={'AmaranthPurple'}  />
+        <MeInput placeholder='password' label='password' type={"password"} color='AmaranthPurple' />
+        <MeInput type={'date'} theme='InverseEnglishViolet' />
+        <MeInput type={'datetime-local'} theme='InverseEnglishViolet' />
+        <MeInput id='0111' regexValidation={"email"} placeholder="example@mail.com" type={'email'} label="email" theme={'SpaceCadet'}  />
+        <MeInput type={'number'} placeholder="number" theme={'AmaranthPurple'}  />
+        <MeInput type={'time'} theme={'AmaranthPurple'}  />
+        <MeInput id='2' noHoverAnimation regexValidation={"tel"} type={'tel'} label="Telephone" placeholder="07X XX XX XXX" theme={'AmaranthPurple'}  />
+        <MeInput regexValidation={"url"} label="url" placeholder="https://www.example.com" type={'url'} required />
         
-
-        <MeInput type={'file'} />
+{/* Fix input file ... checkbox ... radio ... slider */}
         
+            </form>
         </div>
     )
 }

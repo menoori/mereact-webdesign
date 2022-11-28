@@ -36,11 +36,14 @@ interface MeInputProps {
     | TRANSITIONHEX;
 }
 export default function MeInput(props: MeInputProps) {
+  // ----- CONSTANTS -----
+  const hasIcon = props.type === "password" ? true : false;
   // ----- STATE -----
   const [onClick, setOnClick] = useState(false);
   const [onHover, setOnHover] = useState(false);
   const [onFocus, setOnFocus] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [value, setValue] = useState("");
   // ----- STYLING -----
   const handleColor = (): {
     backgroundImage: string;
@@ -145,9 +148,25 @@ export default function MeInput(props: MeInputProps) {
     transition: "color 300ms ease-in-out",
   };
 
+  const labelStyle: React.CSSProperties = {
+    position: "absolute",
+    left: "1.9rem",
+    top: onFocus || value !== "" ? "1.2rem" : "50%",
+
+    color: onHover ? handleColor().secondColor : handleColor().firstColor,
+
+    fontSize: "1.6rem",
+    fontWeight: 400,
+    lineHeight: 1,
+
+    transition: "200ms cubic-bezier(0, 0, 0.2, 1) 0ms",
+    transformOrigin: "top left",
+    transform: onFocus || value !== "" ? "scale(.6)" : "translateY(-50%)",
+  };
+
   const inputStyle: React.CSSProperties = {
-    paddingInline: "1.6rem",
-    paddingBlock: "1.8rem",
+    paddingInline: hasIcon ? "1.6rem 3.9rem" : "1.6rem",
+    paddingBlock: "2rem 1.2rem",
 
     opacity: props.disabled ? 0.5 : 1,
 
@@ -180,12 +199,18 @@ export default function MeInput(props: MeInputProps) {
 
     cursor: props.disabled ? "not-allowed" : "text",
   };
-  // meTODO https://jacobruiz.com/blog/2021/2/11/how-to-transition-placeholder-text-into-a-label-in-react-floating-label-inputs
+  // ----- HANDLER FUNCTIONS -----
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
+
   return (
     <div style={wrapperStyle}>
       <input
+        value={value}
         type={showPassword ? "text" : props.type}
-        placeholder={props.placeholder}
+        // placeholder={props.placeholder}
         style={inputStyle}
         required={props.required}
         onTouchStart={() => setOnClick(true)}
@@ -197,6 +222,7 @@ export default function MeInput(props: MeInputProps) {
         onFocus={() => setOnFocus(true)}
         onBlur={() => setOnFocus(false)}
         disabled={props.disabled}
+        onChange={(e) => handleChange(e)}
       />
       {props.type === "date" && (
         <FontAwesomeIcon icon={faCalendar} style={iconStyle} />
@@ -213,6 +239,7 @@ export default function MeInput(props: MeInputProps) {
           onMouseLeave={() => setOnHover(false)}
         />
       )}
+      <label style={labelStyle}>{props.placeholder}</label>
     </div>
   );
 }

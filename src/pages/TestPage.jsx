@@ -1,6 +1,7 @@
 import React from 'react'
 import MeButton from '../components/MeButton'
 import MeInput from '../components/MeInput'
+import MeInputFile from '../components/MeInputFile'
 
 export default function TestPage() {
     return (
@@ -20,6 +21,7 @@ export default function TestPage() {
         <MeInput id='2' noHoverAnimation regexValidation={"tel"} type={'tel'} label="Telephone" placeholder="07X XX XX XXX" theme={'AmaranthPurple'}  />
         <MeInput regexValidation={"url"} label="url" placeholder="https://www.example.com" type={'url'} required />
         
+        <MeInputFile id='989' label="select a file" onSelectFile={(data)=>console.log(data)}/>
 {/* Fix input file ... checkbox ... radio ... slider */}
         
             </form>

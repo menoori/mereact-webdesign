@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 
 // NPM INSTALLS
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
@@ -54,9 +53,7 @@ interface MeInputProps {
   label?: string;
   placeholder?: string;
   required?: boolean;
-  setError?: boolean;
-  successColor?: "dark" | "light";
-  errorColor?: "dark" | "light";
+  validationColor?: "dark" | "light";
   noHoverAnimation?: boolean;
   theme?:
     | "OuterSpaceCrayola"
@@ -72,15 +69,15 @@ interface MeInputProps {
 export default function MeInput(props: MeInputProps) {
   // ----- CONSTANTS -----
   const successColor =
-    props.successColor === "dark"
+    props.validationColor === "dark"
       ? "#388e3c"
-      : props.successColor === "light"
+      : props.validationColor === "light"
       ? "#81c784"
       : "#66bb6a";
   const errorColor =
-    props.errorColor === "dark"
+    props.validationColor === "dark"
       ? "#d32f2f"
-      : props.errorColor === "light"
+      : props.validationColor === "light"
       ? "#e57373"
       : "#f44336";
   // ----- STATE -----
@@ -98,11 +95,6 @@ export default function MeInput(props: MeInputProps) {
     try {
       if (!props.id && props.regexValidation && !props.noValidationAnimation) {
         console.log("Include id to have animation on your validation");
-      }
-      if (props.setError) {
-        setValidate("error");
-      } else {
-        setValidate("neutral");
       }
       if (
         (props.type === "date" || props.type === "datetime-local") &&
@@ -248,10 +240,6 @@ export default function MeInput(props: MeInputProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (props.onChange) props.onChange(e);
     setValue(e.target.value);
-    if (props.setError) {
-      setValidate("error");
-      return;
-    }
     if (!props.regexValidation) return;
     const isValid = RegExp(handleRegex()!).test(e.target.value);
     if (isValid) {
@@ -411,8 +399,7 @@ export default function MeInput(props: MeInputProps) {
       : onHover && !props.noHoverAnimation
       ? "100%"
       : "0%",
-    transition:
-      "background 300ms ease-in-out, color 300ms ease-in-out, transform 300ms cubic-bezier(0.57, 0.21, 0.69, 3.25)",
+    transition: "background 300ms ease-in-out, color 300ms ease-in-out",
 
     fontSize: "1.6rem",
     fontWeight: "400",

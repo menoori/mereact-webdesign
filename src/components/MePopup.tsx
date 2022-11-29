@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactElement, ReactNode } from "react";
 
 // NPM INSTALLS
 import { css, StyleSheet } from "aphrodite";
@@ -13,7 +13,8 @@ type TRANSITIONHEX = {
   secondColor: HEX;
 };
 interface MePopupProps {
-  children: any;
+  children: ReactElement[];
+  topBarTitle?: string;
   theme?:
     | "OuterSpaceCrayola"
     | "InverseOuterSpaceCrayola"
@@ -132,8 +133,26 @@ export default function MePopup(props: MePopupProps) {
     fontWeight: "400",
   };
 
-  const closeButtonStyle: React.CSSProperties = {
+  const topBarStyle: React.CSSProperties = {
+    display: "flex",
     position: "relative",
+
+    width: "100%",
+    marginBottom: "25px",
+  };
+  const topBarTitleStyle: React.CSSProperties = {
+    display: "flex",
+    justifyContent: "center",
+
+    width: "100%",
+    paddingInline: "calc(1.8rem + 25px)",
+
+    color: handleColor().firstColor,
+    fontSize: "3rem",
+    fontWeight: "800",
+  };
+  const closeButtonStyle: React.CSSProperties = {
+    position: "absolute",
 
     backgroundColor: "transparent",
     borderBottom: "2px solid transparent",
@@ -142,9 +161,10 @@ export default function MePopup(props: MePopupProps) {
     height: "25px",
   };
 
-  const topBarStyle: React.CSSProperties = {
-    width: "100%",
-    display: "flex",
+  const childrenStyle: React.CSSProperties = {
+    display: "grid",
+    gap: "1rem",
+    justifyContent: "center",
   };
 
   const styles = StyleSheet.create({
@@ -192,8 +212,13 @@ export default function MePopup(props: MePopupProps) {
           style={closeButtonStyle}
           className={css(styles.closeButton)}
         ></button>
+        <h2 style={topBarTitleStyle}>{props.topBarTitle}</h2>
       </div>
-      <div>{props.children}</div>
+      <div style={childrenStyle}>
+        {props.children.map((child) => {
+          return child;
+        })}
+      </div>
     </aside>
   );
 }

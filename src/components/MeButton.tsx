@@ -242,7 +242,7 @@ export default function MeButton(props: MeButtonProps) {
       onBlur={() => setOnFocus(false)}
       disabled={props.disabled}
     >
-      <i style={iconStyle}>{props.icon}</i>
+      {props.icon && <i style={iconStyle}>{props.icon}</i>}
       <span style={spanStyle}>{props.text}</span>
     </button>
   );

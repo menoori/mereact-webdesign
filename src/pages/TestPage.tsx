@@ -1,3 +1,4 @@
+import "./TestPage.scss";
 import React from "react";
 import MeButton from "../components/MeButton";
 import MeInput from "../components/MeInput";
@@ -7,7 +8,43 @@ import MePopup from "../components/MePopup";
 export default function TestPage() {
   return (
     <div>
-      <MePopup />
+      <MePopup>
+        <div>
+          <MeButton
+            type="submit"
+            transitionY
+            text="my button"
+            size="large"
+            theme={"SpaceCadet"}
+            icon="+"
+          />
+
+          <MeInput
+            placeholder="password"
+            label="password"
+            type={"password"}
+            theme="AmaranthPurple"
+          />
+          <MeInput
+            placeholder="password"
+            label="password"
+            type={"password"}
+            theme="AmaranthPurple"
+          />
+          <MeInput
+            placeholder="password"
+            label="password"
+            type={"password"}
+            theme="AmaranthPurple"
+          />
+          <MeInput
+            placeholder="password"
+            label="password"
+            type={"password"}
+            theme="AmaranthPurple"
+          />
+        </div>
+      </MePopup>
       <MeButton
         disabled
         onClick={() => console.log("hej")}

@@ -390,7 +390,7 @@ export default function MeInput(props: MeInputProps) {
       ? ""
       : onFocus
       ? `inset 0 0 0 2px ${handleColor().firstColor}`
-      : "none",
+      : "0 4px 8px 0 rgba(0,0,0,0.12)",
     backgroundImage: handleColor()?.backgroundImage,
     backgroundSize: "100vw",
     backgroundRepeat: "no-repeat",

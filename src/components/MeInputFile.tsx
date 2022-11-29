@@ -6,7 +6,7 @@ import { faFile } from "@fortawesome/free-solid-svg-icons";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 /*
-  Information about the MeInput Component
+  Information about the MeInputFile Component
 */
 
 type AnimationType = "shake-vertically" | "shake-horizontally";

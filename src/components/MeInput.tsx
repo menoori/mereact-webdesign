@@ -12,12 +12,14 @@ import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import { faGlobe } from "@fortawesome/free-solid-svg-icons";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { handleAnimation, handleColor, handleRegex } from "../base/handlers";
+import { MeRegexValidate, MeTheme } from "../base/types";
+import { basicStyle } from "../base/styles";
 
 /*
   Information about the MeInput Component
 */
 
-type AnimationType = "shake-vertically" | "shake-horizontally";
 type HEX = `#${string}`;
 type TRANSITIONHEX = {
   fromHEX: HEX;
@@ -29,14 +31,7 @@ type TRANSITIONHEX = {
 interface MeInputProps {
   id?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  regexValidation?:
-    | "tel"
-    | "email"
-    | "soc-sec"
-    | "password"
-    | "swe-car-plate"
-    | "url"
-    | RegExp;
+  regexValidation?: MeRegexValidate;
   type?:
     | "password"
     | "date"
@@ -55,16 +50,7 @@ interface MeInputProps {
   required?: boolean;
   validationColor?: "dark" | "light";
   noHoverAnimation?: boolean;
-  theme?:
-    | "OuterSpaceCrayola"
-    | "InverseOuterSpaceCrayola"
-    | "SpaceCadet"
-    | "InverseSpaceCadet"
-    | "AmaranthPurple"
-    | "InverseAmaranthPurple"
-    | "EnglishViolet"
-    | "InverseEnglishViolet"
-    | TRANSITIONHEX;
+  theme?: MeTheme;
 }
 export default function MeInput(props: MeInputProps) {
   // ----- CONSTANTS -----
@@ -108,88 +94,6 @@ export default function MeInput(props: MeInputProps) {
 
   // ----- HANDLER FUNCTIONS -----
 
-  const handleColor = (): {
-    backgroundImage: string;
-    firstColor: HEX;
-    secondColor: HEX;
-    borderColor: HEX;
-  } => {
-    const angle = 30;
-    switch (props.theme) {
-      case "OuterSpaceCrayola":
-        return {
-          backgroundImage: `linear-gradient(${angle}deg,#F6F7F5 50%,#2E3739 50%)`,
-          firstColor: "#2E3739",
-          secondColor: "#F6F7F5",
-          borderColor: "#F6F7F5",
-        };
-      case "InverseOuterSpaceCrayola":
-        return {
-          backgroundImage: `linear-gradient(${angle}deg,#2E3739 50%,#F6F7F5 50%)`,
-          firstColor: "#F6F7F5",
-          secondColor: "#2E3739",
-          borderColor: "#2E3739",
-        };
-      case "SpaceCadet":
-        return {
-          backgroundImage: `linear-gradient(${angle}deg,#F6F7F5 50%,#283A68 50%)`,
-          firstColor: "#283A68",
-          secondColor: "#F6F7F5",
-          borderColor: "#F6F7F5",
-        };
-      case "InverseSpaceCadet":
-        return {
-          backgroundImage: `linear-gradient(${angle}deg,#283A68 50%,#F6F7F5 50%)`,
-          firstColor: "#F6F7F5",
-          secondColor: "#283A68",
-          borderColor: "#283A68",
-        };
-      case "AmaranthPurple":
-        return {
-          backgroundImage: `linear-gradient(${angle}deg,#F6F7F5 50%,#9E3A53 50%)`,
-          firstColor: "#9E3A53",
-          secondColor: "#F6F7F5",
-          borderColor: "#F6F7F5",
-        };
-      case "InverseAmaranthPurple":
-        return {
-          backgroundImage: `linear-gradient(${angle}deg,#9E3A53 50%,#F6F7F5 50%)`,
-          firstColor: "#F6F7F5",
-          secondColor: "#9E3A53",
-          borderColor: "#9E3A53",
-        };
-      case "EnglishViolet":
-        return {
-          backgroundImage: `linear-gradient(${angle}deg,#F6F7F5 50%,#4A3A50 50%)`,
-          firstColor: "#4A3A50",
-          secondColor: "#F6F7F5",
-          borderColor: "#F6F7F5",
-        };
-      case "InverseEnglishViolet":
-        return {
-          backgroundImage: `linear-gradient(${angle}deg,#4A3A50 50%,#F6F7F5 50%)`,
-          firstColor: "#F6F7F5",
-          secondColor: "#4A3A50",
-          borderColor: "#4A3A50",
-        };
-      default:
-        if (props.theme?.fromHEX) {
-          return {
-            backgroundImage: `linear-gradient(${angle}deg, ${props.theme.fromHEX} 50%,${props.theme.toHEX} 50%)`,
-            firstColor: props.theme.firstColor,
-            secondColor: props.theme.secondColor,
-            borderColor: props.theme.fromHEX,
-          };
-        }
-        return {
-          backgroundImage: `linear-gradient(${angle}deg,#fff 50%,#252525 50%)`,
-          firstColor: "#252525",
-          secondColor: "#fff",
-          borderColor: "#fff",
-        };
-    }
-  };
-
   const handleIcon = (): JSX.Element | null => {
     switch (props.type) {
       case "date" || "datetime-local":
@@ -217,75 +121,20 @@ export default function MeInput(props: MeInputProps) {
     }
   };
 
-  const handleRegex = (): RegExp | null => {
-    switch (props.regexValidation) {
-      case "soc-sec":
-        return /^(19|20|21)?[0-9]{6}[-]?[0-9]{4}$/;
-      case "tel":
-        return /^[0-9]{8,13}$/;
-      case "password":
-        return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
-      case "swe-car-plate":
-        return /^[a-zA-Z]{3}([0-9]{3}|[0-9]{2}[a-zA-Z])$/;
-      case "email":
-        return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-      case "url":
-        return /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
-      default:
-        if (props.regexValidation) return props.regexValidation;
-        return null;
-    }
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (props.onChange) props.onChange(e);
     setValue(e.target.value);
     if (!props.regexValidation) return;
-    const isValid = RegExp(handleRegex()!).test(e.target.value);
+    const isValid = RegExp(handleRegex(props.regexValidation)!).test(
+      e.target.value
+    );
     if (isValid) {
       if (validate === "success") return;
-      handleAnimation("shake-vertically");
       setValidate("success");
+      if (!props.noValidationAnimation) return;
+      handleAnimation("shake-vertically", props.id!);
     } else {
       setValidate("neutral");
-    }
-  };
-
-  const handleAnimation = (animationType: AnimationType) => {
-    let elementAnimation: Keyframe[] | PropertyIndexedKeyframes | null;
-    let elementTiming: { duration: number; iteration: number };
-    const element = document.getElementById(props.id!);
-    if (element === null || props.noValidationAnimation) return;
-
-    switch (animationType) {
-      case "shake-vertically":
-        elementAnimation = [
-          { transform: "translateY(0)" },
-          { transform: "translateY(0.5rem)" },
-          { transform: "translateY(-0.5rem)" },
-          { transform: "translateY(0)" },
-        ];
-        elementTiming = {
-          duration: 200,
-          iteration: 2,
-        };
-        element!.animate(elementAnimation, elementTiming);
-        break;
-      case "shake-horizontally":
-        elementAnimation = [
-          { transform: "translateX(0)" },
-          { transform: "translateX(0.5rem)" },
-          { transform: "translateX(-0.5rem)" },
-          { transform: "translateX(0)" },
-        ];
-        elementTiming = {
-          duration: 200,
-          iteration: 2,
-        };
-        element!.animate(elementAnimation, elementTiming);
-        break;
-      default:
-        break;
     }
   };
 
@@ -296,11 +145,12 @@ export default function MeInput(props: MeInputProps) {
       setValidate("neutral");
       return;
     }
-    const isValid = RegExp(handleRegex()!).test(value);
+    const isValid = RegExp(handleRegex(props.regexValidation)!).test(value);
     if (!isValid) {
       if (validate === "error") return;
       setValidate("error");
-      handleAnimation("shake-horizontally");
+      if (!props.noValidationAnimation) return;
+      handleAnimation("shake-horizontally", props.id!);
     }
   };
 
@@ -326,8 +176,8 @@ export default function MeInput(props: MeInputProps) {
         : validate === "error"
         ? errorColor
         : onHover && !props.noHoverAnimation
-        ? handleColor().secondColor
-        : handleColor().firstColor,
+        ? handleColor(props.theme!).secondColor
+        : handleColor(props.theme!).firstColor,
 
     fontSize: "1.2rem",
 
@@ -345,8 +195,8 @@ export default function MeInput(props: MeInputProps) {
 
     color:
       onHover && !props.noHoverAnimation
-        ? handleColor().secondColor
-        : handleColor().firstColor,
+        ? handleColor(props.theme!).secondColor
+        : handleColor(props.theme!).firstColor,
 
     fontSize: "1.6rem",
     fontWeight: 400,
@@ -359,6 +209,14 @@ export default function MeInput(props: MeInputProps) {
   };
 
   const inputStyle: React.CSSProperties = {
+    ...basicStyle(
+      props.theme!,
+      props.disabled!,
+      onClick,
+      onHover,
+      onFocus,
+      props.noHoverAnimation!
+    ),
     paddingInline:
       handleIcon() !== null && !props.hideIcon
         ? props.type === "password"
@@ -367,38 +225,13 @@ export default function MeInput(props: MeInputProps) {
         : "1.6rem",
     paddingBlock: props.label ? "2rem 1.2rem" : "1.8rem",
 
-    opacity: props.disabled ? 0.5 : 1,
-
-    borderRadius: ".8rem",
-    color: props.disabled
-      ? handleColor().firstColor
-      : onHover && !props.noHoverAnimation
-      ? handleColor()?.secondColor
-      : handleColor()?.firstColor,
     border:
       validate === "success"
         ? `3px solid ${successColor}`
         : validate === "error"
         ? `3px solid ${errorColor}`
-        : `3px solid ${handleColor()?.borderColor}`,
-    filter: props.disabled
-      ? "grayscale(100%)"
-      : onClick
-      ? "brightness(.8)"
-      : "",
-    boxShadow: props.disabled
-      ? ""
-      : onFocus
-      ? `inset 0 0 0 2px ${handleColor().firstColor}`
-      : "0 4px 8px 0 rgba(0,0,0,0.12)",
-    backgroundImage: handleColor()?.backgroundImage,
-    backgroundSize: "100vw",
-    backgroundRepeat: "no-repeat",
-    backgroundPosition: props.disabled
-      ? ""
-      : onHover && !props.noHoverAnimation
-      ? "100%"
-      : "0%",
+        : `3px solid ${handleColor(props.theme!)?.borderColor}`,
+
     transition: "background 300ms ease-in-out, color 300ms ease-in-out",
 
     fontSize: "1.6rem",

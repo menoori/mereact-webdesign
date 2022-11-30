@@ -3,11 +3,15 @@ import React from "react";
 import MeButton from "../components/MeButton";
 import MeInput from "../components/MeInput";
 import MeInputFile from "../components/MeInputFile";
+import MeTable from "../components/table/MeTable";
+import MeTableRow from "../components/table/MeTableRow";
+import MeTableData from "../components/table/MeTableData";
+import MeTableHeader from "../components/table/MeTableHeader";
 
 export default function TestPage() {
   return (
-    <div>
-      <MeButton
+    <div style={{}}>
+      {/* <MeButton
         disabled
         onClick={() => console.log("hej")}
         transitionY
@@ -63,7 +67,52 @@ export default function TestPage() {
         type={"url"}
         required
       />
-      <MeInputFile id="001" label="add your file" />
+      <MeInputFile id="001" label="add your file" /> */}
+      <MeTable>
+        <MeTableHeader>{["namn", "action", "sum"]}</MeTableHeader>
+        <MeTableRow>
+          <MeTableData>
+            <span>Noor Ameen</span>
+            <span>Stupvägen 71</span>
+          </MeTableData>
+          <MeTableData>
+            <span>Noor Ameen</span>
+            <span>Stupvägen 71</span>
+          </MeTableData>
+          <MeTableData>
+            <span>Noor Ameen</span>
+            <span>Stupvägen 71</span>
+          </MeTableData>
+        </MeTableRow>
+        <MeTableRow>
+          <MeTableData>
+            <span>Noor Ameen</span>
+            <span>Stupvägen 71</span>
+          </MeTableData>
+          <MeTableData>
+            <span>Noor Ameen</span>
+            <span>Stupvägen 71</span>
+          </MeTableData>
+          <MeTableData>
+            <span>Noor Ameen</span>
+            <span>Stupvägen 71</span>
+          </MeTableData>
+        </MeTableRow>
+        <MeTableRow>
+          <MeTableData>
+            <span>Noor Ameen</span>
+            <span>Stupvägen 71</span>
+          </MeTableData>
+          <MeTableData>
+            <span>Noor Ameen</span>
+            <span>Stupvägen 71</span>
+          </MeTableData>
+          <MeTableData>
+            <span>Noor Ameen</span>
+            <span>Stupvägen 71</span>
+          </MeTableData>
+        </MeTableRow>
+      </MeTable>
 
       {/* Fix input file ... checkbox ... radio ... slider */}
     </div>

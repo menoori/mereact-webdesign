@@ -1,0 +1,33 @@
+/* reset part for all elements in the two pseudo forms */
+
+*,
+*::after,
+*::before {
+  /* starting clean */
+  margin: 0;
+  padding: 0;
+  /* this way we force the box-sizing property to be inherited */
+  box-sizing: inherit;
+}
+
+html {
+  // this defines what one ram will be
+  /* bad practise to use pixel in font-size */
+  /* since the user can't then change the root font size */
+  font-size: 62.5%;
+  // 1rem = 10px
+  // 10px/16px = 62,5%
+}
+
+body {
+  /* thus, child elements to body element will inherit box-sizing: border-box */
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+::selection {
+}

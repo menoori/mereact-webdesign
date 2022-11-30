@@ -1,3 +1,4 @@
+import "../style/main.scss";
 // REACT
 import React, { useState } from "react";
 import { handleColor } from "../base/handlers";
@@ -12,6 +13,7 @@ import { MeTheme } from "../base/types";
 
 interface MeButtonProps {
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  buttonStyle?: "flat" | "outline" | "raised";
   disabled?: boolean;
   size?: "small" | "medium" | "large";
   icon?: string;
@@ -118,6 +120,14 @@ export default function MeButton(props: MeButtonProps) {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     if (props.onClick) props.onClick(e);
   };
+  if (props.buttonStyle === "flat") {
+    buttonStyle.backgroundImage = "none";
+    buttonStyle.border = "none";
+    buttonStyle.boxShadow = "none";
+  } else if (props.buttonStyle === "outline") {
+    buttonStyle.backgroundImage = "none";
+    buttonStyle.boxShadow = "none";
+  }
 
   return (
     <button

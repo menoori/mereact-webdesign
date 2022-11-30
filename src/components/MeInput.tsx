@@ -1,3 +1,4 @@
+import "../style/main.scss";
 // REACT
 import React, { useEffect, useState } from "react";
 

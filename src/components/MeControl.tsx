@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StylesManager } from "../base/StylesManager";
 import { MeTheme, MeThemeMode } from "../base/types";
 
@@ -18,5 +18,21 @@ interface MeInputProps {
 export default function MeControl(props: MeInputProps) {
   // ----- CONSTANTS -----
   const SM = new StylesManager(props.theme, props.themeMode);
-  return <div>MeControl</div>;
+
+  // ----- STATE -----
+  const [onClick, setOnClick] = useState(false);
+  const [onHover, setOnHover] = useState(false);
+  const [onFocus, setOnFocus] = useState(false);
+
+  const wrapperStyle: React.CSSProperties = {
+    width: "1.6rem",
+    height: "1.6rem",
+    backgroundColor: SM.inputCSSStyle.firstColor,
+  };
+
+  return (
+    <div style={wrapperStyle} id={props.id}>
+      <span>HEIUHFIOFÖJ</span>
+    </div>
+  );
 }

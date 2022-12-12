@@ -39,7 +39,7 @@ export default function TestPage() {
         label="email"
         theme={"SpaceCadet"}
       />
-
+      {/* PROBLEM MED MEINPUT FUNKAR SOM FIXED */}
       <MeInputFile id="001" label="add your file" />
       <MeControl />
       {/* Fix input file ... checkbox ... radio ... slider */}

@@ -1,6 +1,11 @@
 // REACT
 import React, { useEffect, useState } from "react";
 
+// INTERNAL IMPORTS
+import { MeRegexValidate, MeTheme } from "../base/types";
+import { basicStyle } from "../base/styles";
+import { handleAnimation, handleColor, handleRegex } from "../base/handlers";
+
 // NPM INSTALLS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
@@ -12,9 +17,7 @@ import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import { faGlobe } from "@fortawesome/free-solid-svg-icons";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
-import { handleAnimation, handleColor, handleRegex } from "../base/handlers";
-import { MeRegexValidate, MeTheme } from "../base/types";
-import { basicStyle } from "../base/styles";
+import { faT } from "@fortawesome/free-solid-svg-icons";
 
 /*
   Information about the MeInput Component
@@ -30,7 +33,9 @@ type TRANSITIONHEX = {
 
 interface MeInputProps {
   id?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   regexValidation?: MeRegexValidate;
   type?:
     | "password"
@@ -41,6 +46,7 @@ interface MeInputProps {
     | "time"
     | "tel"
     | "url"
+    | "textarea"
     | undefined;
   noValidationAnimation?: boolean;
   disabled?: boolean;
@@ -116,12 +122,16 @@ export default function MeInput(props: MeInputProps) {
         return <FontAwesomeIcon icon={faPhone} style={iconStyle} />;
       case "url":
         return <FontAwesomeIcon icon={faGlobe} style={iconStyle} />;
+      case "textarea":
+        return <FontAwesomeIcon icon={faT} style={iconStyle} />;
       default:
         return null;
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     if (props.onChange) props.onChange(e);
     setValue(e.target.value);
     if (!props.regexValidation) return;
@@ -217,6 +227,8 @@ export default function MeInput(props: MeInputProps) {
       onFocus,
       props.noHoverAnimation!
     ),
+    display: "flex",
+    alignItems: "center",
     paddingInline:
       handleIcon() !== null && !props.hideIcon
         ? props.type === "password"
@@ -242,24 +254,45 @@ export default function MeInput(props: MeInputProps) {
 
   return (
     <div style={wrapperStyle} id={props.id}>
-      <input
-        id={`input-${props.id}`}
-        value={value}
-        type={showPassword ? "text" : props.type}
-        placeholder={onFocus ? props.placeholder : ""}
-        style={inputStyle}
-        required={props.required}
-        onTouchStart={() => setOnClick(true)}
-        onTouchEnd={() => setOnClick(false)}
-        onMouseDown={() => setOnClick(true)}
-        onMouseUp={() => setOnClick(false)}
-        onMouseEnter={() => setOnHover(true)}
-        onMouseLeave={() => setOnHover(false)}
-        onFocus={() => setOnFocus(true)}
-        onBlur={handleOnBlur}
-        disabled={props.disabled}
-        onChange={(e) => handleChange(e)}
-      />
+      {props.type === "textarea" ? (
+        <textarea
+          id={`input-${props.id}`}
+          value={value}
+          style={inputStyle}
+          placeholder={onFocus ? props.placeholder : ""}
+          required={props.required}
+          onTouchStart={() => setOnClick(true)}
+          onTouchEnd={() => setOnClick(false)}
+          onMouseDown={() => setOnClick(true)}
+          onMouseUp={() => setOnClick(false)}
+          onMouseEnter={() => setOnHover(true)}
+          onMouseLeave={() => setOnHover(false)}
+          onFocus={() => setOnFocus(true)}
+          onBlur={handleOnBlur}
+          disabled={props.disabled}
+          onChange={(e) => handleChange(e)}
+        />
+      ) : (
+        <input
+          id={`input-${props.id}`}
+          value={value}
+          type={showPassword ? "text" : props.type}
+          placeholder={onFocus ? props.placeholder : ""}
+          style={inputStyle}
+          required={props.required}
+          onTouchStart={() => setOnClick(true)}
+          onTouchEnd={() => setOnClick(false)}
+          onMouseDown={() => setOnClick(true)}
+          onMouseUp={() => setOnClick(false)}
+          onMouseEnter={() => setOnHover(true)}
+          onMouseLeave={() => setOnHover(false)}
+          onFocus={() => setOnFocus(true)}
+          onBlur={handleOnBlur}
+          disabled={props.disabled}
+          onChange={(e) => handleChange(e)}
+        />
+      )}
+
       {validate === "success" ? (
         <FontAwesomeIcon icon={faCheckCircle} style={iconStyle} />
       ) : validate === "error" ? (

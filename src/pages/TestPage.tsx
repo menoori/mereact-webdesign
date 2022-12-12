@@ -7,6 +7,7 @@ import MeInputFile from "../components/MeInputFile";
 export default function TestPage() {
   return (
     <div>
+      <MeInput type="textarea" />
       <MeButton
         disabled
         onClick={() => console.log("hej")}
@@ -36,7 +37,7 @@ export default function TestPage() {
         theme="AmaranthPurple"
       />
       <MeInput type={"date"} theme="InverseEnglishViolet" />
-      <MeInput type={"datetime-local"} theme="InverseEnglishViolet" />
+      <MeInput type={"datetime-local"} theme="AmaranthPurple" />
       <MeInput
         id="0111"
         regexValidation={"email"}

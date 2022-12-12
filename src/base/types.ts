@@ -5,16 +5,9 @@ type TRANSITIONHEX = {
   firstColor: HEX;
   secondColor: HEX;
 };
-export type MeTheme =
-  | "OuterSpaceCrayola"
-  | "InverseOuterSpaceCrayola"
-  | "SpaceCadet"
-  | "InverseSpaceCadet"
-  | "AmaranthPurple"
-  | "InverseAmaranthPurple"
-  | "EnglishViolet"
-  | "InverseEnglishViolet"
-  | TRANSITIONHEX;
+export type MeTheme = "SpaceCadet" | "AmaranthPurple";
+
+export type MeThemeMode = "dark" | "light";
 
 export type MeRegexValidate =
   | "tel"

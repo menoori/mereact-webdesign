@@ -1,8 +1,7 @@
 // REACT
 import React, { useState } from "react";
-import { handleColor } from "../base/handlers";
-import { basicStyle } from "../base/styles";
-import { MeTheme } from "../base/types";
+import { StylesManager } from "../base/StylesManager";
+import { MeTheme, MeThemeMode } from "../base/types";
 
 // NPM INSTALLS
 
@@ -18,10 +17,14 @@ interface MeButtonProps {
   text?: string;
   type?: "submit" | "button" | "reset";
   theme?: MeTheme;
+  themeMode?: MeThemeMode;
   noHoverAnimation?: boolean;
   transitionY?: boolean;
 }
 export default function MeButton(props: MeButtonProps) {
+  // ----- CONSTANTS -----
+  const SM = new StylesManager(props.theme, props.themeMode);
+
   // ----- STATE -----
   const [onClick, setOnClick] = useState(false);
   const [onHover, setOnHover] = useState(false);
@@ -77,8 +80,7 @@ export default function MeButton(props: MeButtonProps) {
   };
 
   const buttonStyle: React.CSSProperties = {
-    ...basicStyle(
-      props.theme!,
+    ...SM.inputBasicStyle(
       props.disabled!,
       onClick,
       onHover,
@@ -91,7 +93,7 @@ export default function MeButton(props: MeButtonProps) {
 
     height: buttonHeight(),
 
-    border: `3px solid ${handleColor(props.theme!)?.borderColor}`,
+    border: `3px solid ${SM.inputCSSStyle.borderColor}`,
 
     transition:
       "background 300ms ease-in-out, color 300ms ease-in-out, transform 300ms cubic-bezier(0.57, 0.21, 0.69, 3.25)",

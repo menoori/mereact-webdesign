@@ -2,9 +2,8 @@
 import React, { useEffect, useState } from "react";
 
 // INTERNAL IMPORTS
-import { MeRegexValidate, MeTheme } from "../base/types";
-import { basicStyle } from "../base/styles";
-import { handleAnimation, handleColor, handleRegex } from "../base/handlers";
+import { MeRegexValidate, MeTheme, MeThemeMode } from "../base/types";
+import { handleAnimation, handleRegex } from "../base/handlers";
 
 // NPM INSTALLS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,6 +17,7 @@ import { faGlobe } from "@fortawesome/free-solid-svg-icons";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { faT } from "@fortawesome/free-solid-svg-icons";
+import { StylesManager } from "../base/StylesManager";
 
 /*
   Information about the MeInput Component
@@ -54,24 +54,13 @@ interface MeInputProps {
   label?: string;
   placeholder?: string;
   required?: boolean;
-  validationColor?: "dark" | "light";
+  themeMode?: MeThemeMode;
   noHoverAnimation?: boolean;
   theme?: MeTheme;
 }
 export default function MeInput(props: MeInputProps) {
   // ----- CONSTANTS -----
-  const successColor =
-    props.validationColor === "dark"
-      ? "#388e3c"
-      : props.validationColor === "light"
-      ? "#81c784"
-      : "#66bb6a";
-  const errorColor =
-    props.validationColor === "dark"
-      ? "#d32f2f"
-      : props.validationColor === "light"
-      ? "#e57373"
-      : "#f44336";
+  const SM = new StylesManager(props.theme, props.themeMode);
   // ----- STATE -----
   const [onClick, setOnClick] = useState(false);
   const [onHover, setOnHover] = useState(false);
@@ -182,12 +171,12 @@ export default function MeInput(props: MeInputProps) {
     opacity: props.hideIcon ? "0" : "1",
     color:
       validate === "success"
-        ? successColor
+        ? SM.successColor
         : validate === "error"
-        ? errorColor
+        ? SM.errorColor
         : onHover && !props.noHoverAnimation
-        ? handleColor(props.theme!).secondColor
-        : handleColor(props.theme!).firstColor,
+        ? SM.inputCSSStyle.secondColor
+        : SM.inputCSSStyle.firstColor,
 
     fontSize: "1.2rem",
 
@@ -205,8 +194,8 @@ export default function MeInput(props: MeInputProps) {
 
     color:
       onHover && !props.noHoverAnimation
-        ? handleColor(props.theme!).secondColor
-        : handleColor(props.theme!).firstColor,
+        ? SM.inputCSSStyle.secondColor
+        : SM.inputCSSStyle.firstColor,
 
     fontSize: "1.6rem",
     fontWeight: 400,
@@ -219,8 +208,7 @@ export default function MeInput(props: MeInputProps) {
   };
 
   const inputStyle: React.CSSProperties = {
-    ...basicStyle(
-      props.theme!,
+    ...SM.inputBasicStyle(
       props.disabled!,
       onClick,
       onHover,
@@ -239,10 +227,10 @@ export default function MeInput(props: MeInputProps) {
 
     border:
       validate === "success"
-        ? `3px solid ${successColor}`
+        ? `3px solid ${SM.successColor}`
         : validate === "error"
-        ? `3px solid ${errorColor}`
-        : `3px solid ${handleColor(props.theme!)?.borderColor}`,
+        ? `3px solid ${SM.errorColor}`
+        : `3px solid ${SM.inputCSSStyle.borderColor}`,
 
     transition: "background 300ms ease-in-out, color 300ms ease-in-out",
 

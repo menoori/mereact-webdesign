@@ -22,11 +22,12 @@ export default function TestPage() {
   MEINPUTFILE
 
   Icon is off center when no label text
+  When file received perform validation
  */
   return (
     <>
       <Me_Input label="kaos" />
-      <Me_InputFile label="Input me" />
+      <Me_InputFile label="Input me" id="unique" />
     </>
   );
 }

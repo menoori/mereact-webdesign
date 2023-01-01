@@ -21,7 +21,7 @@ type TRANSITIONHEX = {
   secondColor: HEX;
 };
 interface Me_InputFileProps {
-  id?: string;
+  id: string; // Is a must
   onSelectFile?: (data: string) => void;
   noValidationAnimation?: boolean;
   disabled?: boolean;

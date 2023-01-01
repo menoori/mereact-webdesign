@@ -20,8 +20,8 @@ type TRANSITIONHEX = {
   firstColor: HEX;
   secondColor: HEX;
 };
-interface MeInputFileProps {
-  id: string;
+interface Me_InputFileProps {
+  id?: string;
   onSelectFile?: (data: string) => void;
   noValidationAnimation?: boolean;
   disabled?: boolean;
@@ -32,7 +32,7 @@ interface MeInputFileProps {
   noHoverAnimation?: boolean;
   theme?: MeTheme;
 }
-export default function MeInputFile(props: MeInputFileProps) {
+export default function Me_InputFile(props: Me_InputFileProps) {
   // ----- CONSTANTS -----
   const successColor =
     props.validationColor === "dark"

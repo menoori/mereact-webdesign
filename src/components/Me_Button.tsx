@@ -1,6 +1,6 @@
 import "../style/main.scss";
 // REACT
-import React, { useState } from "react";
+import React, { ReactElement, useState } from "react";
 import { handleColor } from "../base/handlers";
 import { basicStyle } from "../base/styles";
 import { MeTheme } from "../base/types";
@@ -11,19 +11,19 @@ import { MeTheme } from "../base/types";
   Information about the MeButton Component
 */
 
-interface MeButtonProps {
+interface Me_ButtonProps {
+  children: JSX.Element | JSX.Element[] | string | string[];
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   buttonStyle?: "flat" | "outline" | "raised";
   disabled?: boolean;
   size?: "small" | "medium" | "large";
   icon?: string;
-  text?: string;
   type?: "submit" | "button" | "reset";
   theme?: MeTheme;
   noHoverAnimation?: boolean;
   transitionY?: boolean;
 }
-export default function MeButton(props: MeButtonProps) {
+export default function Me_Button(props: Me_ButtonProps) {
   // ----- STATE -----
   const [onClick, setOnClick] = useState(false);
   const [onHover, setOnHover] = useState(false);
@@ -43,7 +43,7 @@ export default function MeButton(props: MeButtonProps) {
       : "5.2rem";
   };
   const spanPaddingInline = (): string => {
-    if (!props.text) return "0";
+    if (!props.children) return "0";
     if (!props.icon)
       return props.size === "small"
         ? "1.6rem"
@@ -58,7 +58,7 @@ export default function MeButton(props: MeButtonProps) {
   };
   const iconPaddingInline = (): string => {
     if (!props.icon) return "0";
-    if (!props.text)
+    if (!props.children)
       return props.size === "small"
         ? ".8rem"
         : props.size === "medium"
@@ -146,7 +146,7 @@ export default function MeButton(props: MeButtonProps) {
       disabled={props.disabled}
     >
       {props.icon && <i style={iconStyle}>{props.icon}</i>}
-      <span style={spanStyle}>{props.text}</span>
+      <span style={spanStyle}>{props.children}</span>
     </button>
   );
 }

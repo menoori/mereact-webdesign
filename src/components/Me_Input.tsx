@@ -29,7 +29,7 @@ type TRANSITIONHEX = {
   secondColor: HEX;
 };
 
-interface MeInputProps {
+interface Me_InputProps {
   id?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   regexValidation?: MeRegexValidate;
@@ -53,7 +53,7 @@ interface MeInputProps {
   noHoverAnimation?: boolean;
   theme?: MeTheme;
 }
-export default function MeInput(props: MeInputProps) {
+export default function Me_Input(props: Me_InputProps) {
   // ----- CONSTANTS -----
   const successColor =
     props.validationColor === "dark"

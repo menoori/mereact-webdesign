@@ -5,11 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFile } from "@fortawesome/free-solid-svg-icons";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
-import { MeTheme } from "../base/types";
-import { handleColor } from "../base/handlers";
-import { basicStyle } from "../base/styles";
+import { MeTheme, MeThemeMode } from "../base/types";
+import { StylesManager } from "../base/StylesManager";
 /*
   Information about the MeInputFile Component
+  - Only allowable files are .txt and .json
 */
 
 type AnimationType = "shake-vertically" | "shake-horizontally";
@@ -28,24 +28,13 @@ interface Me_InputFileProps {
   label?: string;
   hideIcon?: boolean;
   required?: boolean;
-  validationColor?: "dark" | "light";
   noHoverAnimation?: boolean;
   theme?: MeTheme;
+  themeMode?: MeThemeMode;
 }
 export default function Me_InputFile(props: Me_InputFileProps) {
   // ----- CONSTANTS -----
-  const successColor =
-    props.validationColor === "dark"
-      ? "#388e3c"
-      : props.validationColor === "light"
-      ? "#81c784"
-      : "#66bb6a";
-  const errorColor =
-    props.validationColor === "dark"
-      ? "#d32f2f"
-      : props.validationColor === "light"
-      ? "#e57373"
-      : "#f44336";
+  const SM = new StylesManager(props.theme, props.themeMode);
 
   // ----- STATE -----
   const [onClick, setOnClick] = useState(false);
@@ -75,8 +64,7 @@ export default function Me_InputFile(props: Me_InputFileProps) {
   };
 
   const labelStyle: React.CSSProperties = {
-    ...basicStyle(
-      props.theme!,
+    ...SM.inputBasicStyle(
       props.disabled!,
       onClick,
       onHover,
@@ -91,10 +79,10 @@ export default function Me_InputFile(props: Me_InputFileProps) {
 
     border:
       validate === "success"
-        ? `3px solid ${successColor}`
+        ? `3px solid ${SM.successColor}`
         : validate === "error"
-        ? `3px solid ${errorColor}`
-        : `3px solid ${handleColor(props.theme!)?.borderColor}`,
+        ? `3px solid ${SM.errorColor}`
+        : `3px solid ${SM.CSS.borderColor}`,
 
     transition: "background 300ms ease-in-out, color 300ms ease-in-out",
 
@@ -117,12 +105,12 @@ export default function Me_InputFile(props: Me_InputFileProps) {
     opacity: props.hideIcon ? "0" : "1",
     color:
       validate === "success"
-        ? successColor
+        ? SM.successColor
         : validate === "error"
-        ? errorColor
+        ? SM.errorColor
         : onHover && !props.noHoverAnimation
-        ? handleColor(props.theme!).secondColor
-        : handleColor(props.theme!).firstColor,
+        ? SM.CSS.secondColor
+        : SM.CSS.firstColor,
 
     fontSize: "1.2rem",
 

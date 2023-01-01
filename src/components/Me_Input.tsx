@@ -2,6 +2,10 @@ import "../style/main.scss";
 // REACT
 import React, { useEffect, useState } from "react";
 
+// INTERNAL IMPORTS
+import { MeRegexValidate, MeTheme, MeThemeMode } from "../base/types";
+import { handleAnimation, handleRegex } from "../base/handlers";
+
 // NPM INSTALLS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
@@ -13,9 +17,8 @@ import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import { faGlobe } from "@fortawesome/free-solid-svg-icons";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
-import { handleAnimation, handleColor, handleRegex } from "../base/handlers";
-import { MeRegexValidate, MeTheme } from "../base/types";
-import { basicStyle } from "../base/styles";
+import { faT } from "@fortawesome/free-solid-svg-icons";
+import { StylesManager } from "../base/StylesManager";
 
 /*
   Information about the MeInput Component
@@ -31,7 +34,9 @@ type TRANSITIONHEX = {
 
 interface Me_InputProps {
   id?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   regexValidation?: MeRegexValidate;
   type?:
     | "password"
@@ -42,6 +47,7 @@ interface Me_InputProps {
     | "time"
     | "tel"
     | "url"
+    | "textarea"
     | undefined;
   noValidationAnimation?: boolean;
   disabled?: boolean;
@@ -49,24 +55,13 @@ interface Me_InputProps {
   label?: string;
   placeholder?: string;
   required?: boolean;
-  validationColor?: "dark" | "light";
+  themeMode?: MeThemeMode;
   noHoverAnimation?: boolean;
   theme?: MeTheme;
 }
 export default function Me_Input(props: Me_InputProps) {
   // ----- CONSTANTS -----
-  const successColor =
-    props.validationColor === "dark"
-      ? "#388e3c"
-      : props.validationColor === "light"
-      ? "#81c784"
-      : "#66bb6a";
-  const errorColor =
-    props.validationColor === "dark"
-      ? "#d32f2f"
-      : props.validationColor === "light"
-      ? "#e57373"
-      : "#f44336";
+  const SM = new StylesManager(props.theme, props.themeMode);
   // ----- STATE -----
   const [onClick, setOnClick] = useState(false);
   const [onHover, setOnHover] = useState(false);
@@ -117,12 +112,16 @@ export default function Me_Input(props: Me_InputProps) {
         return <FontAwesomeIcon icon={faPhone} style={iconStyle} />;
       case "url":
         return <FontAwesomeIcon icon={faGlobe} style={iconStyle} />;
+      case "textarea":
+        return <FontAwesomeIcon icon={faT} style={iconStyle} />;
       default:
         return null;
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     if (props.onChange) props.onChange(e);
     setValue(e.target.value);
     if (!props.regexValidation) return;
@@ -173,12 +172,12 @@ export default function Me_Input(props: Me_InputProps) {
     opacity: props.hideIcon ? "0" : "1",
     color:
       validate === "success"
-        ? successColor
+        ? SM.successColor
         : validate === "error"
-        ? errorColor
+        ? SM.errorColor
         : onHover && !props.noHoverAnimation
-        ? handleColor(props.theme!).secondColor
-        : handleColor(props.theme!).firstColor,
+        ? SM.CSS.secondColor
+        : SM.CSS.firstColor,
 
     fontSize: "1.2rem",
 
@@ -196,8 +195,8 @@ export default function Me_Input(props: Me_InputProps) {
 
     color:
       onHover && !props.noHoverAnimation
-        ? handleColor(props.theme!).secondColor
-        : handleColor(props.theme!).firstColor,
+        ? SM.CSS.secondColor
+        : SM.CSS.firstColor,
 
     fontSize: "1.6rem",
     fontWeight: 400,
@@ -210,14 +209,15 @@ export default function Me_Input(props: Me_InputProps) {
   };
 
   const inputStyle: React.CSSProperties = {
-    ...basicStyle(
-      props.theme!,
+    ...SM.inputBasicStyle(
       props.disabled!,
       onClick,
       onHover,
       onFocus,
       props.noHoverAnimation!
     ),
+    display: "flex",
+    alignItems: "center",
     paddingInline:
       handleIcon() !== null && !props.hideIcon
         ? props.type === "password"
@@ -228,10 +228,10 @@ export default function Me_Input(props: Me_InputProps) {
 
     border:
       validate === "success"
-        ? `3px solid ${successColor}`
+        ? `3px solid ${SM.successColor}`
         : validate === "error"
-        ? `3px solid ${errorColor}`
-        : `3px solid ${handleColor(props.theme!)?.borderColor}`,
+        ? `3px solid ${SM.errorColor}`
+        : `3px solid ${SM.CSS.borderColor}`,
 
     transition: "background 300ms ease-in-out, color 300ms ease-in-out",
 
@@ -243,24 +243,45 @@ export default function Me_Input(props: Me_InputProps) {
 
   return (
     <div style={wrapperStyle} id={props.id}>
-      <input
-        id={`input-${props.id}`}
-        value={value}
-        type={showPassword ? "text" : props.type}
-        placeholder={onFocus ? props.placeholder : ""}
-        style={inputStyle}
-        required={props.required}
-        onTouchStart={() => setOnClick(true)}
-        onTouchEnd={() => setOnClick(false)}
-        onMouseDown={() => setOnClick(true)}
-        onMouseUp={() => setOnClick(false)}
-        onMouseEnter={() => setOnHover(true)}
-        onMouseLeave={() => setOnHover(false)}
-        onFocus={() => setOnFocus(true)}
-        onBlur={handleOnBlur}
-        disabled={props.disabled}
-        onChange={(e) => handleChange(e)}
-      />
+      {props.type === "textarea" ? (
+        <textarea
+          id={`input-${props.id}`}
+          value={value}
+          style={inputStyle}
+          placeholder={onFocus ? props.placeholder : ""}
+          required={props.required}
+          onTouchStart={() => setOnClick(true)}
+          onTouchEnd={() => setOnClick(false)}
+          onMouseDown={() => setOnClick(true)}
+          onMouseUp={() => setOnClick(false)}
+          onMouseEnter={() => setOnHover(true)}
+          onMouseLeave={() => setOnHover(false)}
+          onFocus={() => setOnFocus(true)}
+          onBlur={handleOnBlur}
+          disabled={props.disabled}
+          onChange={(e) => handleChange(e)}
+        />
+      ) : (
+        <input
+          id={`input-${props.id}`}
+          value={value}
+          type={showPassword ? "text" : props.type}
+          placeholder={onFocus ? props.placeholder : ""}
+          style={inputStyle}
+          required={props.required}
+          onTouchStart={() => setOnClick(true)}
+          onTouchEnd={() => setOnClick(false)}
+          onMouseDown={() => setOnClick(true)}
+          onMouseUp={() => setOnClick(false)}
+          onMouseEnter={() => setOnHover(true)}
+          onMouseLeave={() => setOnHover(false)}
+          onFocus={() => setOnFocus(true)}
+          onBlur={handleOnBlur}
+          disabled={props.disabled}
+          onChange={(e) => handleChange(e)}
+        />
+      )}
+
       {validate === "success" ? (
         <FontAwesomeIcon icon={faCheckCircle} style={iconStyle} />
       ) : validate === "error" ? (

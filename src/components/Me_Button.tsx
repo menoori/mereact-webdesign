@@ -1,9 +1,8 @@
 import "../style/main.scss";
 // REACT
 import React, { ReactElement, useState } from "react";
-import { handleColor } from "../base/handlers";
-import { basicStyle } from "../base/styles";
-import { MeTheme } from "../base/types";
+import { MeTheme, MeThemeMode } from "../base/types";
+import { StylesManager } from "../base/StylesManager";
 
 // NPM INSTALLS
 
@@ -20,10 +19,13 @@ interface Me_ButtonProps {
   icon?: string;
   type?: "submit" | "button" | "reset";
   theme?: MeTheme;
+  themeMode?: MeThemeMode;
   noHoverAnimation?: boolean;
   transitionY?: boolean;
 }
 export default function Me_Button(props: Me_ButtonProps) {
+  // ----- CONSTANTS -----
+  const SM = new StylesManager(props.theme, props.themeMode);
   // ----- STATE -----
   const [onClick, setOnClick] = useState(false);
   const [onHover, setOnHover] = useState(false);
@@ -77,10 +79,8 @@ export default function Me_Button(props: Me_ButtonProps) {
       ? "2.0rem"
       : "2.4rem";
   };
-
   const buttonStyle: React.CSSProperties = {
-    ...basicStyle(
-      props.theme!,
+    ...SM.inputBasicStyle(
       props.disabled!,
       onClick,
       onHover,
@@ -93,7 +93,7 @@ export default function Me_Button(props: Me_ButtonProps) {
 
     height: buttonHeight(),
 
-    border: `3px solid ${handleColor(props.theme!)?.borderColor}`,
+    border: `3px solid ${SM.CSS.borderColor}`,
 
     transition:
       "background 300ms ease-in-out, color 300ms ease-in-out, transform 300ms cubic-bezier(0.57, 0.21, 0.69, 3.25)",
@@ -107,16 +107,14 @@ export default function Me_Button(props: Me_ButtonProps) {
       ? "translateY(-0.5rem)"
       : "translateY(0)",
   };
-
   const spanStyle: React.CSSProperties = {
     paddingInline: spanPaddingInline(),
   };
-
   const iconStyle: React.CSSProperties = {
     paddingInline: iconPaddingInline(),
     fontSize: iconSize(),
   };
-
+  // ----- HANDLERS -----
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     if (props.onClick) props.onClick(e);
   };
